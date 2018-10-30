@@ -4,7 +4,6 @@ import (
 	"gin-first/helper"
 	"gin-first/models"
 	"github.com/jinzhu/gorm"
-	"sync"
 )
 
 type UserRepository interface {
@@ -19,15 +18,10 @@ type userRepository struct {
 	db *gorm.DB
 }
 
-var userRepoIns *userRepository
-
-var uronce sync.Once
+var userRepoIns = &userRepository{}
 
 // 实例化存储对象
 func UserRepositoryInstance(db *gorm.DB) UserRepository {
-	uronce.Do(func() {
-		userRepoIns = &userRepository{}
-	})
 	userRepoIns.db = db
 	return userRepoIns
 }

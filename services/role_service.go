@@ -6,7 +6,6 @@ import (
 	"gin-first/models"
 	"gin-first/repositories"
 	"strings"
-	"sync"
 )
 
 // role service 接口
@@ -31,15 +30,10 @@ type RoleService interface {
 	GetPage(page int, pageSize int, role *model.Role) *helper.PageBean
 }
 
-var roleServiceIns *roleService
-
-var rsOnce sync.Once
+var roleServiceIns = &roleService{}
 
 // 获取 roleService实例
 func RoleServiceInstance(repo repositories.RoleRepository) RoleService {
-	rsOnce.Do(func() {
-		roleServiceIns = &roleService{}
-	})
 	roleServiceIns.repo = repo
 	return roleServiceIns
 }

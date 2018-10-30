@@ -6,7 +6,6 @@ import (
 	"gin-first/models"
 	"gin-first/repositories"
 	"strings"
-	"sync"
 )
 
 // user_service 接口
@@ -31,15 +30,10 @@ type UserService interface {
 	GetPage(page int, pageSize int, user *model.User) *helper.PageBean
 }
 
-var userServiceIns *userService
-
-var usOnce sync.Once
+var userServiceIns = &userService{}
 
 // 获取 userService 实例
 func UserServiceInstance(repo repositories.UserRepository) UserService {
-	usOnce.Do(func() {
-		userServiceIns = &userService{}
-	})
 	userServiceIns.repo = repo
 	return userServiceIns
 }

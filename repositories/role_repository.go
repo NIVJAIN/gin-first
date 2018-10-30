@@ -4,7 +4,6 @@ import (
 	"gin-first/helper"
 	"gin-first/models"
 	"github.com/jinzhu/gorm"
-	"sync"
 )
 
 // 接口
@@ -21,15 +20,10 @@ type roleRepository struct {
 	db *gorm.DB
 }
 
-var roleRepoIns *roleRepository
-
-var ronce sync.Once
+var roleRepoIns = &roleRepository{}
 
 // 实例化存储对象
 func RoleRepositoryInstance(db *gorm.DB) RoleRepository {
-	ronce.Do(func() {
-		roleRepoIns = &roleRepository{}
-	})
 	roleRepoIns.db = db
 	return roleRepoIns
 }
