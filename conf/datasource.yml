@@ -1,0 +1,11 @@
+#数据库配置
+datasource:
+  driver: mysql
+  url: '@tcp(127.0.0.1:3306)/test?charset=utf8&parseTime=True&loc=Local'
+  username: root
+  password: test
+  max-open-conns: 100
+  max-idle-conns: 10
+  show-sql: true
+  #全局设置表名不可以为复数形式
+  singular-table: true
