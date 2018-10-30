@@ -10,11 +10,11 @@ import (
 )
 
 // 保存角色
-func SaveRole(context *gin.Context)  {
+func SaveRole(context *gin.Context) {
 	var role model.Role
-	if err:=context.Bind(&role);err== nil {
+	if err := context.Bind(&role); err == nil {
 		role.DeletedAt = nil
-		roleService := service.NewRoleService(repositories.NewRoleRepository(helper.SQL))
+		roleService := service.RoleServiceInstance(repositories.RoleRepositoryInstance(helper.SQL))
 		err := roleService.SaveOrUpdate(&role)
 		if err == nil {
 			context.JSON(http.StatusOK,
@@ -22,22 +22,22 @@ func SaveRole(context *gin.Context)  {
 					Code:    "1",
 					Message: helper.StatusText(helper.SaveStatusOK),
 				})
-			return;
-		}else {
+			return
+		} else {
 			context.JSON(http.StatusOK,
 				&helper.JsonObject{
 					Code:    "0",
 					Message: helper.StatusText(helper.SaveStatusErr),
-					Content:err.Error(),
+					Content: err.Error(),
 				})
-			return;
+			return
 		}
-	}else {
+	} else {
 		context.JSON(http.StatusUnprocessableEntity, helper.JsonObject{
 			Code:    "0",
 			Message: helper.StatusText(helper.BindModelErr),
 			Content: err,
 		})
-		return;
+		return
 	}
 }

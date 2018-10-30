@@ -11,13 +11,13 @@ import (
 )
 
 // 添加用户接口
-func SaveUser(context *gin.Context)  {
-	user :=model.User{}
-	if err := context.Bind(&user); err==nil{
+func SaveUser(context *gin.Context) {
+	user := model.User{}
+	if err := context.Bind(&user); err == nil {
 		user.DeletedAt = nil
 		user.Role = nil
 		user.RoleId = nil
-		userService := service.NewUserService(repositories.NewUserRepository(helper.SQL))
+		userService := service.UserServiceInstance(repositories.UserRepositoryInstance(helper.SQL))
 		err := userService.SaveOrUpdate(&user)
 		if err == nil {
 			context.JSON(http.StatusOK,
@@ -25,16 +25,16 @@ func SaveUser(context *gin.Context)  {
 					Code:    "1",
 					Message: helper.StatusText(helper.SaveStatusOK),
 				})
-			return;
-		}else {
+			return
+		} else {
 			context.JSON(http.StatusOK,
 				&helper.JsonObject{
 					Code:    "0",
 					Message: err.Error(),
 				})
-			return;
+			return
 		}
-	}else {
+	} else {
 		context.JSON(http.StatusUnprocessableEntity, helper.JsonObject{
 			Code:    "0",
 			Message: helper.StatusText(helper.BindModelErr),
@@ -44,46 +44,46 @@ func SaveUser(context *gin.Context)  {
 }
 
 // 分页查询接口
-func GetUserPage(context *gin.Context)  {
-	page,_:= strconv.Atoi(context.Query("page"));
-	pageSize ,_:=strconv.Atoi(context.Query("page_size"));
+func GetUserPage(context *gin.Context) {
+	page, _ := strconv.Atoi(context.Query("page"))
+	pageSize, _ := strconv.Atoi(context.Query("page_size"))
 	username := context.Query("username")
 	phone := context.Query("phone")
-	userService := service.NewUserService(repositories.NewUserRepository(helper.SQL))
-	pageBean := userService.GetPage(page, pageSize, &model.User{UserName:username,Phone:phone})
+	userService := service.UserServiceInstance(repositories.UserRepositoryInstance(helper.SQL))
+	pageBean := userService.GetPage(page, pageSize, &model.User{UserName: username, Phone: phone})
 	context.JSON(http.StatusOK, helper.JsonObject{
-		Code:"1",
-		Content:pageBean,
+		Code:    "1",
+		Content: pageBean,
 	})
 }
 
 // 删除接口
-func DeleteUser(context *gin.Context)  {
+func DeleteUser(context *gin.Context) {
 	id := context.Query("id")
-	userService := service.NewUserService(repositories.NewUserRepository(helper.SQL))
+	userService := service.UserServiceInstance(repositories.UserRepositoryInstance(helper.SQL))
 	err := userService.DeleteByID(id)
-	if err !=nil {
-		context.JSON(http.StatusOK,helper.JsonObject{
-			Code:"0",
-			Message:helper.StatusText(helper.DeleteStatusErr),
-			Content:err.Error(),
+	if err != nil {
+		context.JSON(http.StatusOK, helper.JsonObject{
+			Code:    "0",
+			Message: helper.StatusText(helper.DeleteStatusErr),
+			Content: err.Error(),
 		})
-	}else {
-		context.JSON(http.StatusOK,helper.JsonObject{
-			Code:"1",
-			Message:helper.StatusText(helper.DeleteStatusOK),
+	} else {
+		context.JSON(http.StatusOK, helper.JsonObject{
+			Code:    "1",
+			Message: helper.StatusText(helper.DeleteStatusOK),
 		})
 	}
 	return
 }
 
 // 获取所有用户数据
-func GetAllUsers(context *gin.Context)  {
-	userService := service.NewUserService(repositories.NewUserRepository(helper.SQL))
+func GetAllUsers(context *gin.Context) {
+	userService := service.UserServiceInstance(repositories.UserRepositoryInstance(helper.SQL))
 	users := userService.GetAll()
-	context.JSON(http.StatusOK,helper.JsonObject{
-		Code:"1",
-		Content:users,
+	context.JSON(http.StatusOK, helper.JsonObject{
+		Code:    "1",
+		Content: users,
 	})
 	return
 }

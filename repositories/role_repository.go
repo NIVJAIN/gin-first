@@ -4,6 +4,7 @@ import (
 	"gin-first/helper"
 	"gin-first/models"
 	"github.com/jinzhu/gorm"
+	"sync"
 )
 
 // 接口
@@ -11,55 +12,62 @@ type RoleRepository interface {
 
 	/** 基础 repository 提供最基础的增删改查 */
 	Repository
-
 }
 
 // 结构体
 type roleRepository struct {
 
 	/** 数据库连接对象 */
-	db   *gorm.DB
+	db *gorm.DB
 }
 
+var roleRepoIns *roleRepository
+
+var ronce sync.Once
+
 // 实例化存储对象
-func NewRoleRepository(db *gorm.DB) RoleRepository {
-	return &roleRepository{db: db}
+func RoleRepositoryInstance(db *gorm.DB) RoleRepository {
+	ronce.Do(func() {
+		roleRepoIns = &roleRepository{}
+	})
+	roleRepoIns.db = db
+	return roleRepoIns
 }
 
 // 新增
 func (r *roleRepository) Insert(role interface{}) error {
 	err := r.db.Create(role).Error
-	return err;
+	return err
 }
 
 // 更新
 func (r *roleRepository) Update(role interface{}) error {
 	err := r.db.Save(role).Error
-	return err;
+	return err
 }
 
 // 删除
 func (r *roleRepository) Delete(role interface{}) error {
 	err := r.db.Delete(role).Error
-	return err;
+	return err
 }
 
 // 根据id查询
 func (r *roleRepository) FindOne(id string) interface{} {
 	var role model.Role
-	r.db.Where("id = ?",id).First(&role)
-	return &role;
+	r.db.Where("id = ?", id).First(&role)
+	return &role
 }
 
-func (r *roleRepository) FindSingle(condition string, params ... interface{}) interface{} {
+func (r *roleRepository) FindSingle(condition string, params ...interface{}) interface{} {
 	var role model.Role
-	r.db.Where(condition,params).First(&role)
-	return &role;
+	r.db.Where(condition, params).First(&role)
+	return &role
 }
 
-func (r *roleRepository) FindMore(condition string, params ... interface{}) interface{} {
-	roles := make([]*model.Role,0)
-	r.db.Where(condition,params).First(&roles)
+func (r *roleRepository) FindMore(condition string, params ...interface{}) interface{} {
+	roles := make([]*model.Role, 0)
+	r.db.Where(condition, params).First(&roles)
 	return &roles
 }
 
@@ -68,18 +76,15 @@ func (r *roleRepository) FindPage(page int, pageSize int, andCons map[string]int
 	rows := make([]*model.Role, 0)
 	if andCons != nil && len(andCons) > 0 {
 		for k, v := range andCons {
-			r.db=r.db.Where(k,v)
+			r.db = r.db.Where(k, v)
 		}
 
 	}
 	if orCons != nil && len(orCons) > 0 {
 		for k, v := range orCons {
-			r.db=r.db.Or(k,v)
+			r.db = r.db.Or(k, v)
 		}
 	}
 	r.db.Limit(pageSize).Offset((page - 1) * pageSize).Order("created_at desc").Find(&rows).Count(&total)
 	return &helper.PageBean{Page: page, PageSize: pageSize, Total: total, Rows: rows}
 }
-
-
-

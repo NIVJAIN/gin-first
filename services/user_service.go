@@ -6,33 +6,42 @@ import (
 	"gin-first/models"
 	"gin-first/repositories"
 	"strings"
+	"sync"
 )
 
 // user_service 接口
 type UserService interface {
 
 	/** 保存或修改 */
-	SaveOrUpdate( user *model.User) error
+	SaveOrUpdate(user *model.User) error
 
 	/** 根据 id 查询 */
-	GetByID(id string)              *model.User
+	GetByID(id string) *model.User
 
 	/** 根据用户名查询 */
-	GetByUserName(username string)  *model.User
+	GetByUserName(username string) *model.User
 
 	/** 根据 id 删除 */
-	DeleteByID(id string)           error
+	DeleteByID(id string) error
 
 	/** 查询所有  */
-	GetAll()                        []*model.User
+	GetAll() []*model.User
 
 	/** 分页查询 */
-	GetPage(page int, pageSize int,user *model.User) *helper.PageBean
+	GetPage(page int, pageSize int, user *model.User) *helper.PageBean
 }
 
-// NewUserService returns the default user service.
-func NewUserService(repo repositories.UserRepository) UserService {
-	return &userService{repo:repo}
+var userServiceIns *userService
+
+var usOnce sync.Once
+
+// 获取 userService 实例
+func UserServiceInstance(repo repositories.UserRepository) UserService {
+	usOnce.Do(func() {
+		userServiceIns = &userService{}
+	})
+	userServiceIns.repo = repo
+	return userServiceIns
 }
 
 // 结构体
@@ -55,17 +64,17 @@ func (us *userService) SaveOrUpdate(user *model.User) error {
 	userByName := us.repo.FindSingle("user_name = ?", user.UserName).(*model.User)
 
 	// 校验手机号码是否重复
-	userByPhone := us.repo.FindSingle("phone = ?",user.Phone).(*model.User)
+	userByPhone := us.repo.FindSingle("phone = ?", user.Phone).(*model.User)
 	if user.ID == "" {
 		// 添加
-		if userByName != nil && userByName.ID != ""{
+		if userByName != nil && userByName.ID != "" {
 			return errors.New(helper.StatusText(helper.ExistSameNameErr))
 		}
-		if userByPhone != nil && userByPhone.ID != ""{
+		if userByPhone != nil && userByPhone.ID != "" {
 			return errors.New(helper.StatusText(helper.ExistSamePhoneErr))
 		}
 		return us.repo.Insert(user)
-	}else {
+	} else {
 		// 修改
 		persist := us.repo.FindOne(user.ID).(*model.User)
 		if persist == nil || persist.ID == "" {
@@ -88,7 +97,7 @@ func (us *userService) GetAll() []*model.User {
 	return users
 }
 
-func (us *userService) GetByID(id string) *model.User{
+func (us *userService) GetByID(id string) *model.User {
 	if strings.TrimSpace(id) == "" {
 		return nil
 	}
@@ -98,7 +107,7 @@ func (us *userService) GetByID(id string) *model.User{
 
 func (us *userService) DeleteByID(id string) error {
 	user := us.repo.FindOne(id).(*model.User)
-	if user == nil || user.ID =="" {
+	if user == nil || user.ID == "" {
 		return errors.New(helper.StatusText(helper.DeleteObjIsNil))
 	}
 	err := us.repo.Delete(user)
@@ -107,7 +116,7 @@ func (us *userService) DeleteByID(id string) error {
 
 func (us *userService) GetPage(page int, pageSize int, user *model.User) *helper.PageBean {
 	andCons := make(map[string]interface{})
-	if user !=nil && user.UserName != "" {
+	if user != nil && user.UserName != "" {
 		andCons["user_name LIKE ?"] = user.UserName + "%"
 	}
 	if user != nil && user.Phone != "" {
@@ -116,4 +125,3 @@ func (us *userService) GetPage(page int, pageSize int, user *model.User) *helper
 	pageBean := us.repo.FindPage(page, pageSize, andCons, nil)
 	return pageBean
 }
-

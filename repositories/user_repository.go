@@ -4,24 +4,32 @@ import (
 	"gin-first/helper"
 	"gin-first/models"
 	"github.com/jinzhu/gorm"
+	"sync"
 )
 
 type UserRepository interface {
 
 	/** 基础 repository 提供最基础的增删改查 */
 	Repository
-
 }
 
 type userRepository struct {
 
 	/** 数据库连接对象 */
-	db   *gorm.DB
+	db *gorm.DB
 }
 
+var userRepoIns *userRepository
+
+var uronce sync.Once
+
 // 实例化存储对象
-func NewUserRepository(db *gorm.DB) UserRepository {
-	return &userRepository{db}
+func UserRepositoryInstance(db *gorm.DB) UserRepository {
+	uronce.Do(func() {
+		userRepoIns = &userRepository{}
+	})
+	userRepoIns.db = db
+	return userRepoIns
 }
 
 // 新增
@@ -43,39 +51,39 @@ func (r *userRepository) Delete(user interface{}) error {
 }
 
 // 根据 id 查询
-func (r *userRepository) FindOne(id string) interface{}{
+func (r *userRepository) FindOne(id string) interface{} {
 	var user model.User
-	r.db.Where("id = ?",id).First(&user)
-	return &user;
+	r.db.Where("id = ?", id).First(&user)
+	return &user
 }
 
 // 条件查询返回单值
-func (r *userRepository) FindSingle(condition string, params ... interface{}) interface{} {
+func (r *userRepository) FindSingle(condition string, params ...interface{}) interface{} {
 	var user model.User
-	r.db.Where(condition,params).First(&user)
-	return &user;
+	r.db.Where(condition, params).First(&user)
+	return &user
 }
 
 // 条件查询返回多值
-func (r *userRepository) FindMore(condition string, params ... interface{}) interface{} {
+func (r *userRepository) FindMore(condition string, params ...interface{}) interface{} {
 	users := make([]*model.User, 0)
-	r.db.Where(condition,params).Find(&users)
+	r.db.Where(condition, params).Find(&users)
 	return users
 }
 
 // 分页查询
-func (r *userRepository) FindPage(page int, pageSize int,andCons map[string]interface{},orCons map[string] interface{}) (pageBean *helper.PageBean){
+func (r *userRepository) FindPage(page int, pageSize int, andCons map[string]interface{}, orCons map[string]interface{}) (pageBean *helper.PageBean) {
 	total := 0
 	rows := make([]model.User, 0)
 	if andCons != nil && len(andCons) > 0 {
 		for k, v := range andCons {
-			r.db=r.db.Where(k,v)
+			r.db = r.db.Where(k, v)
 		}
 
 	}
 	if orCons != nil && len(orCons) > 0 {
 		for k, v := range orCons {
-			r.db=r.db.Or(k,v)
+			r.db = r.db.Or(k, v)
 		}
 	}
 	r.db.Limit(pageSize).Offset((page - 1) * pageSize).Order("login_time desc").Find(&rows).Count(&total)
