@@ -50,12 +50,18 @@ func (r *roleRepository) Delete(role interface{}) error {
 func (r *roleRepository) FindOne(id string) interface{} {
 	var role model.Role
 	r.db.Where("id = ?", id).First(&role)
+	if role.ID == "" {
+		return nil
+	}
 	return &role
 }
 
 func (r *roleRepository) FindSingle(condition string, params ...interface{}) interface{} {
 	var role model.Role
 	r.db.Where(condition, params).First(&role)
+	if role.ID == "" {
+		return nil
+	}
 	return &role
 }
 

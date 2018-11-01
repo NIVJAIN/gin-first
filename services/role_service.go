@@ -50,7 +50,7 @@ func (rs *roleService) SaveOrUpdate(role *model.Role) error {
 		return errors.New(helper.StatusText(helper.SaveObjIsNil))
 	}
 	// 判断角色名称是否已存在
-	roleByName := rs.repo.FindSingle("role_name = ?", role.RoleName).(*model.Role)
+	roleByName := rs.GetByRoleName(role.RoleName)
 	if role.ID == "" {
 		// 添加
 		if roleByName != nil && roleByName.ID != "" {
@@ -59,7 +59,7 @@ func (rs *roleService) SaveOrUpdate(role *model.Role) error {
 		return rs.repo.Insert(role)
 	} else {
 		// 修改
-		persist := rs.repo.FindOne(role.ID).(*model.Role)
+		persist := rs.GetByID(role.ID)
 		if persist == nil || persist.ID == "" {
 			return errors.New(helper.StatusText(helper.UpdateObjIsNil))
 		}
@@ -75,13 +75,19 @@ func (rs *roleService) GetByID(id string) *model.Role {
 	if strings.TrimSpace(id) == "" {
 		return nil
 	}
-	role := rs.repo.FindOne(id).(*model.Role)
-	return role
+	role := rs.repo.FindOne(id)
+	if role != nil {
+		return role.(*model.Role)
+	}
+	return nil
 }
 
 func (rs *roleService) GetByRoleName(rolename string) *model.Role {
-	role := rs.repo.FindSingle("role_name = ?", rolename).(*model.Role)
-	return role
+	role := rs.repo.FindSingle("role_name = ?", rolename)
+	if role != nil {
+		return role.(*model.Role)
+	}
+	return nil
 }
 
 func (rs *roleService) DeleteByID(id string) error {

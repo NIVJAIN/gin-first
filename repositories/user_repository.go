@@ -48,6 +48,9 @@ func (r *userRepository) Delete(user interface{}) error {
 func (r *userRepository) FindOne(id string) interface{} {
 	var user model.User
 	r.db.Where("id = ?", id).First(&user)
+	if user.ID == "" {
+		return nil
+	}
 	return &user
 }
 
@@ -55,6 +58,9 @@ func (r *userRepository) FindOne(id string) interface{} {
 func (r *userRepository) FindSingle(condition string, params ...interface{}) interface{} {
 	var user model.User
 	r.db.Where(condition, params).First(&user)
+	if user.ID == "" {
+		return nil
+	}
 	return &user
 }
 

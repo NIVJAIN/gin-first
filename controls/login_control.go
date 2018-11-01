@@ -13,12 +13,13 @@ import (
 	"time"
 )
 
+// 用户登陆接口
 func Login(context *gin.Context) {
 	username := context.Query("username")
 	password := context.Query("password")
 	userService := service.UserServiceInstance(repositories.UserRepositoryInstance(helper.SQL))
 	user := userService.GetByUserName(username)
-	if user.Password == password {
+	if user != nil && user.Password == password {
 		user.LogonCount += 1
 		user.LoginTime = time.Now()
 		err := userService.SaveOrUpdate(user)

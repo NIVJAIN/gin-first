@@ -20,6 +20,9 @@ type UserService interface {
 	/** 根据用户名查询 */
 	GetByUserName(username string) *model.User
 
+	// 根据电话号码查询
+	GetByPhone(phone string) *model.User
+
 	/** 根据 id 删除 */
 	DeleteByID(id string) error
 
@@ -46,8 +49,19 @@ type userService struct {
 }
 
 func (us *userService) GetByUserName(username string) *model.User {
-	user := us.repo.FindSingle("user_name = ?", username).(*model.User)
-	return user
+	user := us.repo.FindSingle("user_name = ?", username)
+	if user != nil {
+		return user.(*model.User)
+	}
+	return nil
+}
+
+func (us *userService) GetByPhone(phone string) *model.User {
+	user := us.repo.FindSingle("phone = ?", phone)
+	if user != nil {
+		return user.(*model.User)
+	}
+	return nil
 }
 
 func (us *userService) SaveOrUpdate(user *model.User) error {
@@ -55,10 +69,10 @@ func (us *userService) SaveOrUpdate(user *model.User) error {
 		return errors.New(helper.StatusText(helper.SaveObjIsNil))
 	}
 	// 校验用户名是否重复
-	userByName := us.repo.FindSingle("user_name = ?", user.UserName).(*model.User)
+	userByName := us.GetByUserName(user.UserName)
 
 	// 校验手机号码是否重复
-	userByPhone := us.repo.FindSingle("phone = ?", user.Phone).(*model.User)
+	userByPhone := us.GetByPhone(user.Phone)
 	if user.ID == "" {
 		// 添加
 		if userByName != nil && userByName.ID != "" {
@@ -70,7 +84,7 @@ func (us *userService) SaveOrUpdate(user *model.User) error {
 		return us.repo.Insert(user)
 	} else {
 		// 修改
-		persist := us.repo.FindOne(user.ID).(*model.User)
+		persist := us.GetByID(user.ID)
 		if persist == nil || persist.ID == "" {
 			return errors.New(helper.StatusText(helper.UpdateObjIsNil))
 		}

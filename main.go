@@ -4,6 +4,7 @@ import (
 	"gin-first/helper"
 	"gin-first/routers"
 	"gin-first/system"
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"os"
@@ -13,10 +14,18 @@ import (
 func main() {
 	ginConfig := system.GetGinConfig()
 	gin.SetMode(ginConfig.RunMode)
-	router := gin.New();
-	router.Use(system.Logger(helper.AccessLogger),gin.Recovery())
+	router := gin.New()
+	router.Use(system.Logger(helper.AccessLogger), gin.Recovery())
+	//配置跨域
+	router.Use(cors.New(cors.Config{
+		AllowMethods:     []string{"GET", "POST"},
+		AllowHeaders:     []string{"Origin", "Content-Length", "Content-Type", "ACCESS_TOKEN"},
+		AllowCredentials: false,
+		AllowAllOrigins:  true,
+		MaxAge:           12 * time.Hour,
+	}))
 	router.HandleMethodNotAllowed = ginConfig.HandleMethodNotAllowed
-	router.Static("/page", "view");
+	router.Static("/page", "view")
 	router.MaxMultipartMemory = ginConfig.MaxMultipartMemory
 	routers.RegisterApiRoutes(router)
 	routers.RegisterAppRoutes(router)
@@ -25,22 +34,20 @@ func main() {
 	serverConfig := system.GetServerConfig()
 	server := &http.Server{
 		Addr:           serverConfig.Addr,
-		IdleTimeout:    serverConfig.IdleTimeout  * time.Second,
-		ReadTimeout:    serverConfig.ReadTimeout  * time.Second,
+		IdleTimeout:    serverConfig.IdleTimeout * time.Second,
+		ReadTimeout:    serverConfig.ReadTimeout * time.Second,
 		WriteTimeout:   serverConfig.WriteTimeout * time.Second,
 		MaxHeaderBytes: serverConfig.MaxHeaderBytes,
 		Handler:        router,
 	}
-	server.ListenAndServe();
+	server.ListenAndServe()
 }
 
-func init()  {
+func init() {
 	// 先读取服务配置文件
-	err := system.LoadServerConfig("conf/server-config.yml");
-	if err !=nil {
-		helper.ErrorLogger.Errorln("读取服务配置错误：",err)
+	err := system.LoadServerConfig("conf/server-config.yml")
+	if err != nil {
+		helper.ErrorLogger.Errorln("读取服务配置错误：", err)
 		os.Exit(3)
 	}
 }
-
-
