@@ -81,6 +81,7 @@ func (us *userService) SaveOrUpdate(user *model.User) error {
 		if userByPhone != nil && userByPhone.ID != "" {
 			return errors.New(helper.StatusText(helper.ExistSamePhoneErr))
 		}
+		user.Password = helper.SHA256(user.Password)
 		return us.repo.Insert(user)
 	} else {
 		// 修改
@@ -95,6 +96,7 @@ func (us *userService) SaveOrUpdate(user *model.User) error {
 		if userByPhone != nil && userByPhone.ID != user.ID {
 			return errors.New(helper.StatusText(helper.ExistSamePhoneErr))
 		}
+		user.Password = persist.Password
 		return us.repo.Update(user)
 	}
 	return nil

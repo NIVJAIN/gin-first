@@ -44,6 +44,12 @@ const (
 	/** 匹配中文 */
 	ChineseRegex = `^[\u4e00-\u9fa5]+$`
 
+	/** 匹配强密码   字母+数字+特殊字符 */
+	StrongPassword = `^(?![a-zA-z]+$)(?!\d+$)(?![!@#$%^&*]+$)(?![a-zA-z\d]+$)(?![a-zA-z!@#$%^&*]+$)(?![\d!@#$%^&*]+$)[a-zA-Z\d!@#$%^&*]+$`
+
+	/** 匹配中度密码 字母+数字，字母+特殊字符，数字+特殊字符*/
+	MediumPassword = `^(?![a-zA-z]+$)(?!\d+$)(?![!@#$%^&*]+$)[a-zA-Z\d!@#$%^&*]+$`
+
 	/** 匹配数字字母 */
 	LetNumRegex = `^[A-Za-z0-9]+$`
 )
@@ -169,6 +175,30 @@ func MatchChineseMax(text string, max int) bool {
 	}
 	if len(text) <= max {
 		matched, _ := regexp.MatchString(ChineseRegex, text)
+		return matched
+	}
+	return false
+}
+
+// 强密码
+func MatchStrongPassword(text string, min int, max int) bool {
+	if min > max {
+		return false
+	}
+	if len(text) >= min && len(text) <= max {
+		matched, _ := regexp.MatchString(StrongPassword, text)
+		return matched
+	}
+	return false
+}
+
+// 匹配中度密码
+func MatchMediumPassword(text string, min int, max int) bool {
+	if min > max {
+		return false
+	}
+	if len(text) >= min && len(text) <= max {
+		matched, _ := regexp.MatchString(MediumPassword, text)
 		return matched
 	}
 	return false

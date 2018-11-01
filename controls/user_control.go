@@ -14,6 +14,15 @@ import (
 func SaveUser(context *gin.Context) {
 	user := model.User{}
 	if err := context.Bind(&user); err == nil {
+		err = user.Validator()
+		if err != nil {
+			context.JSON(http.StatusOK,
+				&helper.JsonObject{
+					Code:    "0",
+					Message: err.Error(),
+				})
+			return
+		}
 		user.DeletedAt = nil
 		user.Role = nil
 		user.RoleId = nil
