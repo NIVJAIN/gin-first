@@ -5,4 +5,4 @@ Simple Rest API using Gin web framework, Gorm as ORM 、Logrus as log middleware
 
 
 
-特点：1.内置很多web常用的正则校验规则，以及正则校验函数
+特点：1.内置很多web常用的正则校验规则，以及正则校验函数(helper/regex.go)
