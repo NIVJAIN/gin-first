@@ -1,6 +1,10 @@
 package helper
 
-import "regexp"
+import (
+	"errors"
+	"fmt"
+	"regexp"
+)
 
 // Regular expression patterns
 const (
@@ -38,11 +42,17 @@ const (
 	/** 匹配Mac地址 */
 	MacRegex = `(([a-fA-F0-9]{2}[:-]){5}([a-fA-F0-9]{2}))`
 
-	/** 匹配带表单符号的 描述信息 */
+	/** 匹配带表带单符号的 描述信息 */
 	DescRegex = `^[，|。|！|：|“|”|？|；|《|》|（|）|\u4e00-\u9fa5A-Za-z0-9_/./,]+$`
 
 	/** 匹配中文 */
 	ChineseRegex = `^[\u4e00-\u9fa5]+$`
+
+	/** 匹配中文名 */
+	ChineseNameRegex = `^[\u4e00-\u9fa5|·]+$`
+
+	/** 匹配英文名 */
+	EnglishNameRegex = `^[a-zA-Z]+[' ']?[a-zA-Z]+$`
 
 	/** 匹配强密码   字母+数字+特殊字符 */
 	StrongPassword = `^(?![a-zA-z]+$)(?!\d+$)(?![!@#$%^&*]+$)(?![a-zA-z\d]+$)(?![a-zA-z!@#$%^&*]+$)(?![\d!@#$%^&*]+$)[a-zA-Z\d!@#$%^&*]+$`
@@ -52,153 +62,285 @@ const (
 
 	/** 匹配数字字母 */
 	LetNumRegex = `^[A-Za-z0-9]+$`
+
+	/** 匹配纯数字字符串 */
+	NumStrRegex = `^[0-9]+$`
+
+	/** 匹配十六进制字符串 */
+	HexStrRegex = `^[0-9A-Fa-f]+$`
 )
 
 // 匹配是否为日期格式
-func IsDate(text string) bool {
-	matched, _ := regexp.MatchString(DateRegex, text)
-	return matched
+func IsDate(text string) (ok bool, err error) {
+	if matched, _ := regexp.MatchString(DateRegex, text); matched {
+		return true, nil
+	}
+	return false, errors.New("请输入正确的日期格式")
 }
 
 // 匹配是否是时间格式
-func IsTime(text string) bool {
-	matched, _ := regexp.MatchString(TimeRegex, text)
-	return matched
+func IsTime(text string) (ok bool, err error) {
+	if matched, _ := regexp.MatchString(TimeRegex, text); matched {
+		return true, nil
+	}
+	return false, errors.New("请输入正确的时间格式")
 }
 
 // 匹配是否是电话号码
-func IsPhone(text string) bool {
-	matched, _ := regexp.MatchString(PhoneRegex, text)
-	return matched
+func IsPhone(text string) (ok bool, err error) {
+	if matched, _ := regexp.MatchString(PhoneRegex, text); matched {
+		return true, nil
+	}
+	return false, errors.New("请输入正确的手机号码")
 }
 
 // 匹配网络连接地址
-func IsUrl(text string) bool {
-	matched, _ := regexp.MatchString(UrlRegex, text)
-	return matched
+func IsUrl(text string) (ok bool, err error) {
+	if matched, _ := regexp.MatchString(UrlRegex, text); matched {
+		return true, nil
+	}
+	return false, errors.New("请输入合法的url地址")
 }
 
 // 匹配邮箱地址
-func IsEmail(text string) bool {
-	matched, _ := regexp.MatchString(EmailRegex, text)
-	return matched
+func IsEmail(text string) (ok bool, err error) {
+	if matched, _ := regexp.MatchString(EmailRegex, text); matched {
+		return true, nil
+	}
+	return false, errors.New("请输入正确的邮箱地址")
 }
 
 // 匹配Ip
-func IsIPAddress(text string) bool {
-	matched, _ := regexp.MatchString(IPRegex, text)
-	return matched
+func IsIPAddress(text string) (ok bool, err error) {
+	if matched, _ := regexp.MatchString(IPRegex, text); matched {
+		return true, nil
+	}
+	return false, errors.New("请输入合法的IP地址")
 }
 
 // 匹配 mac 地址
-func IsMacAddress(text string) bool {
-	matched, _ := regexp.MatchString(MacRegex, text)
-	return matched
+func IsMacAddress(text string) (ok bool, err error) {
+	if matched, _ := regexp.MatchString(MacRegex, text); matched {
+		return true, nil
+	}
+	return false, errors.New("请输入合法的Mac地址")
 }
 
 // 匹配端口
-func IsPort(text string) bool {
-	matched, _ := regexp.MatchString(PortRegex, text)
-	return matched
+func IsPort(text string) (ok bool, err error) {
+	if matched, _ := regexp.MatchString(PortRegex, text); matched {
+		return true, nil
+	}
+	return false, errors.New("请输入合法的端口号")
 }
 
 // 匹配身份证号码
-func IsIDCard(text string) bool {
-	matched, _ := regexp.MatchString(IDCardRegex, text)
-	return matched
+func IsIDCard(text string) (ok bool, err error) {
+	if matched, _ := regexp.MatchString(IDCardRegex, text); matched {
+		return true, nil
+	}
+	return false, errors.New("请输入正确的身份证号")
 }
 
 // 匹配带最大，最小长度限制的描述信息
-func DescMatchMinAndMax(text string, min int, max int) bool {
+func DescMatchMinAndMax(text string, min int, max int) (ok bool, err error) {
 	if min > max {
-		return false
+		return false, errors.New("备注或描述" + StatusText(MinThanMaxErr))
 	}
 	if len(text) >= min && len(text) <= max {
-		matched, _ := regexp.MatchString(DescRegex, text)
-		return matched
+		if matched, _ := regexp.MatchString(DescRegex, text); matched {
+			return true, nil
+		}
+		return false, errors.New(fmt.Sprintf("备注或描述为%d-%d位中文字符字母或数字组合", min, max))
 	}
-	return false
+	return false, errors.New(fmt.Sprintf("备注或描述为%d-%d位中文字符字母或数字组合", min, max))
 }
 
-// 匹配带最大长度的
-func DescMatchMax(text string, max int) bool {
+// 匹配带最大长度的描述信息
+func DescMatchMax(text string, max int) (ok bool, err error) {
 	if max < 0 {
-		return false
+		return false, errors.New("备注或描述" + StatusText(MaxLessZeroErr))
 	}
 	if len(text) <= max {
-		matched, _ := regexp.MatchString(DescRegex, text)
-		return matched
+		if matched, _ := regexp.MatchString(DescRegex, text); matched {
+			return true, nil
+		}
+		return false, errors.New(fmt.Sprintf("备注或描述为小于%d位的中文字符字母或数字组合", max))
 	}
-	return false
+	return false, errors.New(fmt.Sprintf("备注或描述为小于%d位的中文字符字母或数字组合", max))
 }
 
 // 匹配带最大，最小长度的数字字母
-func MatchLetterNumMinAndMax(text string, min int, max int) bool {
+func MatchLetterNumMinAndMax(text string, min int, max int, purpose string) (ok bool, err error) {
 	if min > max {
-		return false
+		return false, errors.New(purpose + StatusText(MinThanMaxErr))
 	}
 	if len(text) >= min && len(text) <= max {
-		matched, _ := regexp.MatchString(LetNumRegex, text)
-		return matched
+		if matched, _ := regexp.MatchString(LetNumRegex, text); matched {
+			return true, nil
+		}
+		return false, errors.New(fmt.Sprintf(purpose+"为%d-%d位符字母或数字组合", min, max))
 	}
-	return false
+	return false, errors.New(fmt.Sprintf(purpose+"为%d-%d位符字母或数字组合", min, max))
 }
 
 // 匹配带最大长度的数字字母
-func MatchLetterNumMax(text string, max int) bool {
+func MatchLetterNumMax(text string, max int, purpose string) (ok bool, err error) {
 	if max < 0 {
-		return false
+		return false, errors.New(purpose + StatusText(MaxLessZeroErr))
 	}
 	if len(text) <= max {
-		matched, _ := regexp.MatchString(LetNumRegex, text)
-		return matched
+		if matched, _ := regexp.MatchString(LetNumRegex, text); matched {
+			return true, nil
+		}
+		return false, errors.New(fmt.Sprintf(purpose+"为小于%d位符字母或数字组合", max))
 	}
-	return false
+	return false, errors.New(fmt.Sprintf(purpose+"为小于%d位符字母或数字组合", max))
 }
 
 // 匹配带最大最小长度的中文
-func MatchChineseMinAndMax(text string, min int, max int) bool {
+func MatchChineseMinAndMax(text string, min int, max int, purpose string) (ok bool, err error) {
+	if min > max {
+		return false, errors.New(purpose + StatusText(MinThanMaxErr))
+	}
+	if len(text) >= min && len(text) <= max {
+		if matched, _ := regexp.MatchString(ChineseRegex, text); matched {
+			return true, nil
+		}
+		return false, errors.New(fmt.Sprintf(purpose+"为%d-%d位中文字符", min, max))
+	}
+	return false, errors.New(fmt.Sprintf(purpose+"为%d-%d位中文字符", min, max))
+}
+
+// 匹配带最大长度的中文
+func MatchChineseMax(text string, max int, purpose string) (ok bool, err error) {
+	if max < 0 {
+		return false, errors.New(purpose + StatusText(MaxLessZeroErr))
+	}
+	if len(text) <= max {
+		if matched, _ := regexp.MatchString(ChineseRegex, text); matched {
+			return true, nil
+		}
+		return false, errors.New(fmt.Sprintf(purpose+"为小于%d位中文字符", max))
+	}
+	return false, errors.New(fmt.Sprintf(purpose+"为小于%d位中文字符", max))
+}
+
+// 匹配中文名字
+func MatchChineseName(text string, min int, max int) (ok bool, err error) {
+	if min > max {
+		return false, errors.New("中文名" + StatusText(MinThanMaxErr))
+	}
+	if len(text) >= min && len(text) <= max {
+		if matched, _ := regexp.MatchString(ChineseNameRegex, text); matched {
+			return true, nil
+		}
+		return false, errors.New(fmt.Sprintf(StatusText(ChineseNameErr), min, max))
+	}
+	return false, errors.New(fmt.Sprintf(StatusText(ChineseNameErr), min, max))
+}
+
+// 匹配英文名
+func MatchEnglishName(text string, min int, max int) (ok bool, err error) {
+	if min > max {
+		return false, errors.New("英文名" + StatusText(MinThanMaxErr))
+	}
+	if len(text) >= min && len(text) <= max {
+		if matched, _ := regexp.MatchString(EnglishNameRegex, text); matched {
+			return true, nil
+		}
+		return false, errors.New(fmt.Sprintf(StatusText(EnglishNameErr), min, max))
+	}
+	return false, errors.New(fmt.Sprintf(StatusText(EnglishNameErr), min, max))
+}
+
+// 强密码
+func MatchStrongPassword(text string, min int, max int) (ok bool, err error) {
+	if min > max {
+		return false, errors.New("密码" + StatusText(MinThanMaxErr))
+	}
+	if len(text) >= min && len(text) <= max {
+		if matched, _ := regexp.MatchString(StrongPassword, text); matched {
+			return true, nil
+		}
+		return false, errors.New(fmt.Sprintf(StatusText(StrongPasswordErr), min, max))
+	}
+	return false, errors.New(fmt.Sprintf(StatusText(StrongPasswordErr), min, max))
+}
+
+// 匹配中度密码
+func MatchMediumPassword(text string, min int, max int) (ok bool, err error) {
+	if min > max {
+		return false, errors.New("密码" + StatusText(MinThanMaxErr))
+	}
+	if len(text) >= min && len(text) <= max {
+		if matched, _ := regexp.MatchString(MediumPassword, text); matched {
+			return true, nil
+		}
+		return false, errors.New(fmt.Sprintf(StatusText(MediumPasswordErr), min, max))
+	}
+	return false, errors.New(fmt.Sprintf(StatusText(MediumPasswordErr), min, max))
+}
+
+// 匹配纯数字字符串
+func MatchNumStrMinAndMax(text string, min int, max int, purpose string) (ok bool, err error) {
+	if min > max {
+		return false, errors.New(purpose + StatusText(MinThanMaxErr))
+	}
+	if len(text) >= min && len(text) <= max {
+		if matched, _ := regexp.MatchString(NumStrRegex, text); matched {
+			return true, nil
+		}
+		return false, errors.New(fmt.Sprintf(purpose+"为%d-%d位0-9的数字", min, max))
+	}
+	return false, errors.New(fmt.Sprintf(purpose+"为%d-%d位0-9的数字", min, max))
+}
+
+// 匹配定长的纯数字
+func MatchNumStrFix(text string, fix int, purpose string) (ok bool, err error) {
+	if fix < 0 {
+		return false, errors.New(purpose + StatusText(FixLessZeroErr))
+	}
+	if len(text) == fix {
+		if matched, _ := regexp.MatchString(HexStrRegex, text); matched {
+			return true, nil
+		}
+		return false, errors.New(fmt.Sprintf(purpose+"为%d位数字", fix))
+	}
+	return false, errors.New(fmt.Sprintf(purpose+"为%d位数字", fix))
+}
+
+// 匹配带最大最小长度的十六进制字符串
+func MatchHexStrMinAndMax(text string, min int, max int) bool {
 	if min > max {
 		return false
 	}
 	if len(text) >= min && len(text) <= max {
-		matched, _ := regexp.MatchString(ChineseRegex, text)
+		matched, _ := regexp.MatchString(HexStrRegex, text)
 		return matched
 	}
 	return false
 }
 
-// 匹配带最大长度的中文
-func MatchChineseMax(text string, max int) bool {
+// 匹配带最大长度的十六进制字符串
+func MatchHexStrMax(text string, max int) bool {
 	if max < 0 {
 		return false
 	}
 	if len(text) <= max {
-		matched, _ := regexp.MatchString(ChineseRegex, text)
+		matched, _ := regexp.MatchString(HexStrRegex, text)
 		return matched
 	}
 	return false
 }
 
-// 强密码
-func MatchStrongPassword(text string, min int, max int) bool {
-	if min > max {
+// 匹配定长的十六进制字符串
+func MatchHexStrFixed(text string, fix int) bool {
+	if fix < 0 {
 		return false
 	}
-	if len(text) >= min && len(text) <= max {
-		matched, _ := regexp.MatchString(StrongPassword, text)
-		return matched
-	}
-	return false
-}
-
-// 匹配中度密码
-func MatchMediumPassword(text string, min int, max int) bool {
-	if min > max {
-		return false
-	}
-	if len(text) >= min && len(text) <= max {
-		matched, _ := regexp.MatchString(MediumPassword, text)
+	if len(text) == fix {
+		matched, _ := regexp.MatchString(HexStrRegex, text)
 		return matched
 	}
 	return false

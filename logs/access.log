@@ -1,7 +1,8 @@
-time="2018-11-01T18:35:52+08:00" level=info msg="[2018-11-01 18:35:52] \"POST /api/save_user\" 200" clientIP=127.0.0.1 dataLength=55 hostname=localhost latency=930 method=POST path=/api/save_user referer= statusCode=200 userAgent=PostmanRuntime/7.1.1
-/7.1.1
-8-11-01T17:01:07+08:00" level=info msg="[2018-11-01 17:01:07] \"POST /api/save_user\" 200" clientIP=127.0.0.1 dataLength=67 hostname=localhost latency=346 method=POST path=/api/save_user referer= statusCode=200 userAgent=PostmanRuntime/7.1.1
--01T16:39:34+08:00" level=info msg="[2018-11-01 16:39:34] \"POST /login\" 200" clientIP=127.0.0.1 dataLength=327 hostname=localhost latency=822 method=POST path=/login referer= statusCode=200 userAgent=PostmanRuntime/7.1.1
+time="2018-11-02T10:19:28+08:00" level=info msg="[2018-11-02 10:19:28] \"POST /api/save_user\" 200" clientIP=127.0.0.1 dataLength=107 hostname=localhost latency=3 method=POST path=/api/save_user referer= statusCode=200 userAgent=PostmanRuntime/7.1.1
+
+09:50:54+08:00" level=info msg="[2018-11-02 09:50:54] \"POST /login\" 200" clientIP=127.0.0.1 dataLength=65 hostname=localhost latency=76 method=POST path=/login referer= statusCode=200 userAgent=PostmanRuntime/7.1.1
+time="2018-11-02T09:50:57+08:00" level=info msg="[2018-11-02 09:50:57] \"POST /login\" 200" clientIP=127.0.0.1 dataLength=65 hostname=localhost latency=75 method=POST path=/login referer= statusCode=200 userAgent=PostmanRuntime/7.1.1
+PostmanRuntime/7.1.1
 time="2018-11-01T16:40:14+08:00" level=error clientIP=127.0.0.1 dataLength=445 hostname=localhost latency=4975 method=POST path=/api/save_user referer= statusCode=422 userAgent=PostmanRuntime/7.1.1
 me=localhost latency=152 method=GET path=/api/get_user_page referer= statusCode=200 userAgent=PostmanRuntime/7.1.1
 time="2018-10-30T18:30:16+08:00" level=info msg="[2018-10-30 18:30:16] \"GET /api/get_user_page\" 200" clientIP=127.0.0.1 dataLength=3634 hostname=localhost latency=150 method=GET path=/api/get_user_page referer= statusCode=200 userAgent=PostmanRuntime/7.1.1

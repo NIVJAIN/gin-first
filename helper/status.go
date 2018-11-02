@@ -3,56 +3,65 @@ package helper
 // 定义一些系统常用的 错误码
 
 const (
+	BindModelErr = 20200
 
-	BindModelErr          =  20200
+	LoginStatusSQLErr = 20319
+	LoginStatusErr    = 20300
+	LoginStatusOK     = 20301
 
-	LoginStatusSQLErr      = 20319
-	LoginStatusErr         = 20300
-	LoginStatusOK          = 20301
+	SaveStatusOK  = 20400
+	SaveStatusErr = 20401
+	SaveObjIsNil  = 20402
 
-	SaveStatusOK           = 20400
-	SaveStatusErr          = 20401
-	SaveObjIsNil           = 20402
+	DeleteStatusOK  = 20403
+	DeleteStatusErr = 20404
+	DeleteObjIsNil  = 20405
 
-	DeleteStatusOK         = 20403
-	DeleteStatusErr        = 20404
-	DeleteObjIsNil         = 20405
+	UpdateObjIsNil = 20406
 
-	UpdateObjIsNil         = 20406
+	ExistSameNameErr  = 20501
+	ExistSamePhoneErr = 20502
 
+	FixLessZeroErr = 20797
+	MaxLessZeroErr = 20798
+	MinThanMaxErr  = 20799
 
-	ExistSameNameErr       = 20501
-	ExistSamePhoneErr      = 20502
-
-
+	MediumPasswordErr = 20801
+	StrongPasswordErr = 20802
+	ChineseNameErr    = 20803
+	EnglishNameErr    = 20804
 )
-
 
 var statusText = map[int]string{
 
-	BindModelErr:          "模型封装异常！",
+	BindModelErr: "模型封装异常！",
 
-	LoginStatusSQLErr:     "用户登陆时更新登陆数据异常！",
-	LoginStatusErr:        "用户名或密码错误!",
-	LoginStatusOK:         "登陆成功！",
+	LoginStatusSQLErr: "用户登陆时更新登陆数据异常！",
+	LoginStatusErr:    "用户名或密码错误!",
+	LoginStatusOK:     "登陆成功！",
 
-	SaveStatusOK:          "保存成功！",
-	SaveStatusErr:         "保存失败！",
-	SaveObjIsNil:          "保存的对象为空！",
+	SaveStatusOK:  "保存成功！",
+	SaveStatusErr: "保存失败！",
+	SaveObjIsNil:  "保存的对象为空！",
 
+	DeleteStatusOK:  "删除成功！",
+	DeleteStatusErr: "删除失败！",
+	DeleteObjIsNil:  "删除的记录不存在！",
 
+	UpdateObjIsNil: "修改的记录不存在！",
 
-	DeleteStatusOK:        "删除成功！",
-	DeleteStatusErr:       "删除失败！",
-	DeleteObjIsNil:        "删除的记录不存在！",
+	ExistSameNameErr:  "已存在同名记录！",
+	ExistSamePhoneErr: "已存在相同手机号！",
 
-	UpdateObjIsNil:        "修改的记录不存在！",
+	/** 与正则相关的一些错误信息 */
+	FixLessZeroErr: "验证规则错误，定长小于0",
+	MaxLessZeroErr: "验证规则错误，最大值小于0",
+	MinThanMaxErr:  "验证规则错误，最大值小于最小值",
 
-	ExistSameNameErr:      "已存在同名记录！",
-	ExistSamePhoneErr:     "已存在相同手机号！",
-
-
-
+	MediumPasswordErr: "密码为%d-%d位字母+数字，字母+特殊字符，数字+特殊字符",
+	StrongPasswordErr: "密码为%d-%d位字母+数字+特殊字符",
+	ChineseNameErr:    "中文名为%d-%d位中文字符可包含'·'",
+	EnglishNameErr:    "英文名为%d-%d英文字符可包含空格",
 }
 
 func StatusText(code int) string {

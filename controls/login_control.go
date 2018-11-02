@@ -19,7 +19,7 @@ func Login(context *gin.Context) {
 	password := context.Query("password")
 	userService := service.UserServiceInstance(repositories.UserRepositoryInstance(helper.SQL))
 	user := userService.GetByUserName(username)
-	if user != nil && user.Password == password {
+	if user != nil && user.Password == helper.SHA256(password) {
 		user.LogonCount += 1
 		user.LoginTime = time.Now()
 		err := userService.SaveOrUpdate(user)

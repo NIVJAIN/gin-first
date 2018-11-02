@@ -91,8 +91,14 @@ func (user *User) Validator() error {
 	if !helper.MatchLetterNumMinAndMax(user.UserName, 4, 16) {
 		return errors.New("用户名为4-16位字母数字组合")
 	}
-	if helper.MatchStrongPassword(user.Password, 6, 13) {
-		return errors.New("密码为6-13位字母数字组合且至少包含一位特殊字符")
+	if ok, err := helper.MatchStrongPassword(user.Password, 6, 13); !ok {
+		return err
+	}
+	if helper.IsPhone(user.Phone) {
+		return errors.New("请输入正确的电话号码")
+	}
+	if helper.IsEmail(user.Email) {
+		return errors.New("请输入正确的邮箱地址")
 	}
 	return nil
 }
