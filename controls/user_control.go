@@ -12,8 +12,8 @@ import (
 
 // 添加用户接口
 func SaveUser(context *gin.Context) {
-	user := model.User{}
-	if err := context.Bind(&user); err == nil {
+	user := &model.User{}
+	if err := context.Bind(user); err == nil {
 		err = user.Validator()
 		if err != nil {
 			context.JSON(http.StatusOK,
@@ -27,7 +27,7 @@ func SaveUser(context *gin.Context) {
 		user.Role = nil
 		user.RoleId = nil
 		userService := service.UserServiceInstance(repositories.UserRepositoryInstance(helper.SQL))
-		err := userService.SaveOrUpdate(&user)
+		err := userService.SaveOrUpdate(user)
 		if err == nil {
 			context.JSON(http.StatusOK,
 				&helper.JsonObject{

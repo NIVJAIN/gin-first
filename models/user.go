@@ -1,10 +1,10 @@
 package model
 
 import (
-	"errors"
 	"gin-first/helper"
 	"github.com/jinzhu/gorm"
 	"github.com/satori/go.uuid"
+	"strings"
 	"time"
 )
 
@@ -88,17 +88,18 @@ func (user *User) BeforeCreate(scope *gorm.Scope) error {
 
 // 校验表单中提交的参数是否合法
 func (user *User) Validator() error {
-	if !helper.MatchLetterNumMinAndMax(user.UserName, 4, 16) {
-		return errors.New("用户名为4-16位字母数字组合")
-	}
-	if ok, err := helper.MatchStrongPassword(user.Password, 6, 13); !ok {
+
+	if ok, err := helper.MatchLetterNumMinAndMax(user.UserName, 4, 16, "用户名"); !ok {
 		return err
 	}
-	if helper.IsPhone(user.Phone) {
-		return errors.New("请输入正确的电话号码")
+	if ok, err := helper.MatchStrongPassword(user.Password, 6, 13); !ok && strings.TrimSpace(user.ID) == "" {
+		return err
 	}
-	if helper.IsEmail(user.Email) {
-		return errors.New("请输入正确的邮箱地址")
+	if ok, err := helper.IsPhone(user.Phone); !ok {
+		return err
+	}
+	if ok, err := helper.IsEmail(user.Email); !ok && strings.TrimSpace(user.Email) != "" {
+		return err
 	}
 	return nil
 }

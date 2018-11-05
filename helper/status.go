@@ -58,8 +58,8 @@ var statusText = map[int]string{
 	MaxLessZeroErr: "验证规则错误，最大值小于0",
 	MinThanMaxErr:  "验证规则错误，最大值小于最小值",
 
-	MediumPasswordErr: "密码为%d-%d位字母+数字，字母+特殊字符，数字+特殊字符",
-	StrongPasswordErr: "密码为%d-%d位字母+数字+特殊字符",
+	MediumPasswordErr: "密码为%d-%d位字母、数字，字母数字必须同时存在",
+	StrongPasswordErr: "密码为%d-%d位字母、数字和符号必须同时存在，符号存在开头和结尾且仅限!@#$%^*",
 	ChineseNameErr:    "中文名为%d-%d位中文字符可包含'·'",
 	EnglishNameErr:    "英文名为%d-%d英文字符可包含空格",
 }
