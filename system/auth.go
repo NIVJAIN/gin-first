@@ -5,16 +5,21 @@ import (
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
 	"net/http"
+	"strings"
 	"time"
 )
 
-func JWTAuth() gin.HandlerFunc  {
+func JWTAuth() gin.HandlerFunc {
 	return func(context *gin.Context) {
+		path := context.Request.URL.Path
+		if strings.Contains(path, "swagger") {
+			return
+		}
 		token := context.Request.Header.Get("ACCESS_TOKEN")
-		if token =="" {
-			context.JSON(http.StatusUnauthorized,gin.H{
-				"status"  :-1,
-				"message" :"请求未携带token,无访问权限！",
+		if token == "" {
+			context.JSON(http.StatusUnauthorized, gin.H{
+				"status":  -1,
+				"message": "请求未携带token,无访问权限！",
 			})
 			context.Abort()
 			return
@@ -22,10 +27,10 @@ func JWTAuth() gin.HandlerFunc  {
 		j := NewJWT()
 		// 解析token包含的信息
 		claims, err := j.ResolveToken(token)
-		if err !=nil {
-			context.JSON(http.StatusUnauthorized,gin.H{
-				"status"  :-1,
-				"message" :err.Error(),
+		if err != nil {
+			context.JSON(http.StatusUnauthorized, gin.H{
+				"status":  -1,
+				"message": err.Error(),
 			})
 			context.Abort()
 			return
@@ -37,7 +42,7 @@ func JWTAuth() gin.HandlerFunc  {
 
 // jwt签名结构
 type JWT struct {
-	SigningKey [] byte
+	SigningKey []byte
 }
 
 // 定义一些常量
@@ -51,15 +56,15 @@ var (
 
 // 载荷，加一些系统需要的信息
 type CustomClaims struct {
-	ID string `json:"userId"`
-	Name string `json:"name"`
+	ID    string `json:"userId"`
+	Name  string `json:"name"`
 	Phone string `json:"phone"`
 	jwt.StandardClaims
 }
 
 // 新建一个 jwt 实例
 func NewJWT() *JWT {
-	return &JWT{ []byte(GetSignKey())}
+	return &JWT{[]byte(GetSignKey())}
 }
 
 // 获取 signKey
@@ -67,27 +72,27 @@ func GetSignKey() string {
 	return SignKey
 }
 
-func SetSignKey(key string) string  {
+func SetSignKey(key string) string {
 	SignKey = key
 	return SignKey
 }
 
 // 生成 tokenConfig
-func (j *JWT) CreateToken (claims CustomClaims)(string,error) {
+func (j *JWT) CreateToken(claims CustomClaims) (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	return token.SignedString(j.SigningKey);
+	return token.SignedString(j.SigningKey)
 }
 
 // 解析 tokenConfig
-func (j *JWT) ResolveToken(tokenString string) (*CustomClaims,error){
-	token,err:=jwt.ParseWithClaims(tokenString,&CustomClaims{}, func(token *jwt.Token) (interface{}, error) {
-		return j.SigningKey,nil
+func (j *JWT) ResolveToken(tokenString string) (*CustomClaims, error) {
+	token, err := jwt.ParseWithClaims(tokenString, &CustomClaims{}, func(token *jwt.Token) (interface{}, error) {
+		return j.SigningKey, nil
 	})
 	if err != nil {
 		if ve, ok := err.(*jwt.ValidationError); ok {
 			if ve.Errors&jwt.ValidationErrorMalformed != 0 {
-				return nil,TokenMalformed
-			}else if ve.Errors&jwt.ValidationErrorExpired != 0 {
+				return nil, TokenMalformed
+			} else if ve.Errors&jwt.ValidationErrorExpired != 0 {
 				return nil, TokenExpired
 			} else if ve.Errors&jwt.ValidationErrorNotValidYet != 0 {
 				return nil, TokenNotValidYet

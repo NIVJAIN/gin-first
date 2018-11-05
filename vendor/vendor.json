@@ -163,6 +163,18 @@
 			"revisionTime": "2018-10-16T11:22:44Z"
 		},
 		{
+			"checksumSHA1": "nZQgTsgShquBO3GYiJx71yxe7y0=",
+			"path": "github.com/swaggo/gin-swagger",
+			"revision": "6f4fdc3ec4545d77ce9f36016e2f2bc7356a356c",
+			"revisionTime": "2018-09-26T02:28:12Z"
+		},
+		{
+			"checksumSHA1": "A1gNAXglJwicLgCC7OIE7+a6KyQ=",
+			"path": "github.com/swaggo/gin-swagger/swaggerFiles",
+			"revision": "6f4fdc3ec4545d77ce9f36016e2f2bc7356a356c",
+			"revisionTime": "2018-09-26T02:28:12Z"
+		},
+		{
 			"checksumSHA1": "qCbBoM07FrGo4Zxlcrn83s1fOQM=",
 			"path": "github.com/swaggo/swag",
 			"revision": "2864d16627b66419e529522dcd66b3acfe90944f",
@@ -191,6 +203,16 @@
 		{
 			"checksumSHA1": "RcrB7tgYS/GMW4QrwVdMOTNqIU8=",
 			"path": "golang.org/x/net/idna",
+			"revision": ""
+		},
+		{
+			"checksumSHA1": "YYGERHywULDK8JVOQJon5g7FDvU=",
+			"path": "golang.org/x/net/webdav",
+			"revision": ""
+		},
+		{
+			"checksumSHA1": "XgtZlzd39qIkBHs6XYrq9dhTCog=",
+			"path": "golang.org/x/net/webdav/internal/xml",
 			"revision": ""
 		},
 		{

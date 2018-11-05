@@ -53,6 +53,17 @@ func SaveUser(context *gin.Context) {
 }
 
 // 分页查询接口
+// @Summary 用户信息分页查询接口
+// @Description 用户信息分页查询
+// @Tags UserController
+// @Accept json
+// @Produce json
+// @Param page query string true "页码"
+// @Param page_size query string true "每页显示最大行"
+// @Param username query string false "用户名"
+// @Param phone query string false "电话"
+// @Success 200 {object} helper.PageBean
+// @Router /api/get_user_page [get]
 func GetUserPage(context *gin.Context) {
 	page, _ := strconv.Atoi(context.Query("page"))
 	pageSize, _ := strconv.Atoi(context.Query("page_size"))
@@ -67,6 +78,14 @@ func GetUserPage(context *gin.Context) {
 }
 
 // 删除接口
+// @Summary 用户信息删除接口
+// @Description 删除用户信息
+// @Tags UserController
+// @Accept json
+// @Produce json
+// @Param id query string true "用户记录id"
+// @Success 200 {object} helper.JsonObject
+// @Router /api/delete_user [post]
 func DeleteUser(context *gin.Context) {
 	id := context.Query("id")
 	userService := service.UserServiceInstance(repositories.UserRepositoryInstance(helper.SQL))
@@ -87,6 +106,13 @@ func DeleteUser(context *gin.Context) {
 }
 
 // 获取所有用户数据
+// @Summary 获取所有用户接口
+// @Description 获取所有用户信息
+// @Tags UserController
+// @Accept json
+// @Produce json
+// @Success 200 {object} helper.JsonObject
+// @Router /api/get_all_users [get]
 func GetAllUsers(context *gin.Context) {
 	userService := service.UserServiceInstance(repositories.UserRepositoryInstance(helper.SQL))
 	users := userService.GetAll()

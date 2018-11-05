@@ -11,6 +11,19 @@ import (
 	"time"
 )
 
+// @title gin-first API 文档
+// @version 1.0
+// @description 这是一个 gin 框架应用 swagger 的示例
+
+// @contact.name YinYongTao
+// @contact.url https://github.com/YinYongTao/gin-first
+// @contact.email yongtao.yin@bsit.cn
+
+// @licenes.name Apache 2.0
+// @licenes.url http://www.apache.org/licenses/LICENSE-2.0.html
+
+// @host 192.168.0.103:8080
+// @BasePath /
 func main() {
 	ginConfig := system.GetGinConfig()
 	gin.SetMode(ginConfig.RunMode)

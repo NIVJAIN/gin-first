@@ -2,8 +2,11 @@ package routers
 
 import (
 	"gin-first/controls"
+	_ "gin-first/docs"
 	"gin-first/system"
 	"github.com/gin-gonic/gin"
+	"github.com/swaggo/gin-swagger"
+	"github.com/swaggo/gin-swagger/swaggerFiles"
 	"net/http"
 )
 
@@ -41,4 +44,7 @@ func RegisterAuthRoutes(router *gin.Engine) {
 // 注册不需要鉴权的 接口
 func RegisterOpenRoutes(router *gin.Engine) {
 	router.POST("login", control.Login)
+
+	// 使用gin-swagger 中间件
+	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 }

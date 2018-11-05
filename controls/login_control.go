@@ -14,6 +14,15 @@ import (
 )
 
 // 用户登陆接口
+// @Summary 用户登陆接口
+// @Description 处理系统用户登陆
+// @Tags LoginController
+// @Accept json
+// @Produce json
+// @Param username query string true "用户名"
+// @Param password query string true "密码"
+// @Success 200 {object} helper.JsonObject
+// @Router /login [post]
 func Login(context *gin.Context) {
 	username := context.Query("username")
 	password := context.Query("password")
