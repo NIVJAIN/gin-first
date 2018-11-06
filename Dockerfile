@@ -35,6 +35,10 @@ RUN upx gin-first
 
 #使用最小的 alpine镜像
 FROM alpine:3.8
+#设置语言格式
+ENV LANG=C.UTF-8
+#设置时区
+RUN apk add tzdata && ls /usr/share/zoneinfo && cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && echo 'Asia/Shanghai' >/etc/timezone
 
 #添加ca-certificates 如果有需要
 RUN apk update && apk add ca-certificates && rm -rf /var/cache/apk/*
@@ -45,7 +49,6 @@ WORKDIR /root
 #从编译器里 copy 二进制文件
 COPY --from=builder /go/src/gin-first/gin-first .
 COPY --from=builder /go/src/gin-first/view/ ./view/
-COPY --from=builder /go/src/gin-first/docs/ ./docs/
 COPY --from=builder /go/src/gin-first/conf/ ./conf/
 COPY --from=builder /go/src/gin-first/logs  ./logs
 
