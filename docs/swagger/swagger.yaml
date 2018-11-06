@@ -106,7 +106,7 @@ definitions:
     - userName
     - phone
     type: object
-host: localhost:8080
+host: 0.0.0.0:8080
 info:
   contact:
     email: yongtao.yin@bsit.cn
