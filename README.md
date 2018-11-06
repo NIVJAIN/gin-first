@@ -19,7 +19,7 @@ Simple Rest API using Gin web framework, Gorm as ORM 、Logrus as log middleware
      
      6.配置好了完整的dockerfile，可以直接运行将项目编译成docker镜像
 
-Swagger效果：
+Swagger效果：http://182.61.45.175:8080/swagger/index.html
 
 ![image](https://github.com/YinYongTao/gin-first/blob/master/view/API%E9%A2%84%E8%A7%88%E6%95%88%E6%9E%9C.png)
 
