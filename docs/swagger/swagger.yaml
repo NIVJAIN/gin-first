@@ -103,10 +103,10 @@ definitions:
         description: '* 姓名'
         type: string
     required:
-    - userName
     - phone
+    - userName
     type: object
-host: 182.61.45.175:8080
+host: 0.0.0.0:8080
 info:
   contact:
     email: yongtao.yin@bsit.cn

@@ -2,7 +2,7 @@ package routers
 
 import (
 	"gin-first/controls"
-	_ "gin-first/docs"
+	 _"gin-first/docs"
 	"gin-first/system"
 	"github.com/gin-gonic/gin"
 	"github.com/swaggo/gin-swagger"

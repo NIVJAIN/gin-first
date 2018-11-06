@@ -1,7 +1,7 @@
 server:
   addr: 0.0.0.0:8080
-  read-timeout: 10
-  write-timeout: 10
+  read-timeout: 60
+  write-timeout: 60
   idle-timeout: 300
   max-header-bytes: 10485760
 

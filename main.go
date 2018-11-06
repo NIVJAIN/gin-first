@@ -22,7 +22,7 @@ import (
 // @licenes.name Apache 2.0
 // @licenes.url http://www.apache.org/licenses/LICENSE-2.0.html
 
-// @host 182.61.45.175:8080
+// @host 0.0.0.0:8080
 // @BasePath /
 func main() {
 	ginConfig := system.GetGinConfig()

@@ -11,7 +11,7 @@
         "license": {},
         "version": "2.0"
     },
-    "host": "182.61.45.175:8080",
+    "host": "0.0.0.0:8080",
     "basePath": "/",
     "paths": {
         "/api/delete_user": {
@@ -396,8 +396,8 @@
         "model.User": {
             "type": "object",
             "required": [
-                "userName",
-                "phone"
+                "phone",
+                "userName"
             ],
             "properties": {
                 "createdAt": {
