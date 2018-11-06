@@ -1,5 +1,4 @@
 
-
 FROM golang:1.10.1 as builder
 
 #作者
@@ -46,6 +45,7 @@ WORKDIR /root
 #从编译器里 copy 二进制文件
 COPY --from=builder /go/src/gin-first/gin-first .
 COPY --from=builder /go/src/gin-first/view/ ./view/
+COPY --from=builder /go/src/gin-first/docs/ ./docs/
 COPY --from=builder /go/src/gin-first/conf/ ./conf/
 COPY --from=builder /go/src/gin-first/logs  ./logs
 
