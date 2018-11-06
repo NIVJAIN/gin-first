@@ -21,5 +21,5 @@ Simple Rest API using Gin web framework, Gorm as ORM 、Logrus as log middleware
 
 效果：
 
-    ![https://github.com/YinYongTao/gin-first/blob/master/view/API%E9%A2%84%E8%A7%88%E6%95%88%E6%9E%9C.png](API 接口文档预览效果)
+    ![https://github.com/YinYongTao/gin-first/blob/master/view/API预览效果.png](API 接口文档预览效果)
 
