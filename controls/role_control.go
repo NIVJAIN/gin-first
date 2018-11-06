@@ -9,7 +9,17 @@ import (
 	"net/http"
 )
 
-// 保存角色
+// 添加修改角色
+// @Summary 添加修改角色
+// @Tags RoleController
+// @Accept json
+// @Produce json
+// @Param id             query string false "角色id,新增时id为空"
+// @Param role_name      query string true  "角色名称"
+// @Param role_key       query string true  "角色类别标识"
+// @Param description    query string true  "角色描述信息"
+// @Success 200 {object} helper.JsonObject
+// @Router /api/save_role [post]
 func SaveRole(context *gin.Context) {
 	var role model.Role
 	if err := context.Bind(&role); err == nil {

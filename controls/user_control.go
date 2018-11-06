@@ -10,7 +10,20 @@ import (
 	"strconv"
 )
 
-// 添加用户接口
+// 添加、修改用户信息
+// @Summary 添加、修改用户信息
+// @Tags UserController
+// @Accept json
+// @Produce json
+// @Param id             query string false "用户记录id,新增时id为空"
+// @Param username       query string true  "用户名"
+// @Param password       query string true  "密码"
+// @Param phone          query string true  "电话号码"
+// @Param email          query string true  "邮件"
+// @Param merchant_no    query string true  "商户号"
+// @Param role_id        query string true  "角色id"
+// @Success 200 {object} helper.JsonObject
+// @Router /api/save_user [post]
 func SaveUser(context *gin.Context) {
 	user := &model.User{}
 	if err := context.Bind(user); err == nil {
@@ -52,9 +65,8 @@ func SaveUser(context *gin.Context) {
 	}
 }
 
-// 分页查询接口
-// @Summary 用户信息分页查询接口
-// @Description 用户信息分页查询
+// 用户信息分页查询
+// @Summary 用户信息分页查询
 // @Tags UserController
 // @Accept json
 // @Produce json
@@ -77,9 +89,8 @@ func GetUserPage(context *gin.Context) {
 	})
 }
 
-// 删除接口
-// @Summary 用户信息删除接口
-// @Description 删除用户信息
+// 删除用户信息
+// @Summary 删除用户信息
 // @Tags UserController
 // @Accept json
 // @Produce json
@@ -105,9 +116,8 @@ func DeleteUser(context *gin.Context) {
 	return
 }
 
-// 获取所有用户数据
-// @Summary 获取所有用户接口
-// @Description 获取所有用户信息
+// 获取所有用户信息
+// @Summary 获取所有用户信息
 // @Tags UserController
 // @Accept json
 // @Produce json
@@ -119,6 +129,25 @@ func GetAllUsers(context *gin.Context) {
 	context.JSON(http.StatusOK, helper.JsonObject{
 		Code:    "1",
 		Content: users,
+	})
+	return
+}
+
+// 用户信息回显
+// @Summary 用户信息回显
+// @Tags UserController
+// @Accept json
+// @Produce json
+// @Param id query string true "用户记录id"
+// @Success 200 {object} model.User
+// @Router /api/get_user [get]
+func GetUser(context *gin.Context) {
+	id := context.Query("id")
+	userService := service.UserServiceInstance(repositories.UserRepositoryInstance(helper.SQL))
+	user := userService.GetByID(id)
+	context.JSON(http.StatusOK, helper.JsonObject{
+		Code:    "1",
+		Content: user,
 	})
 	return
 }

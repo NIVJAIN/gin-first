@@ -15,7 +15,6 @@ import (
 
 // 用户登陆接口
 // @Summary 用户登陆接口
-// @Description 处理系统用户登陆
 // @Tags LoginController
 // @Accept json
 // @Produce json
