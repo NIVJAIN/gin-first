@@ -23,29 +23,38 @@ import (
 // @Success 200 {object} helper.JsonObject
 // @Router /login [post]
 func Login(context *gin.Context) {
-	username := context.Query("username")
-	password := context.Query("password")
-	userService := service.UserServiceInstance(repositories.UserRepositoryInstance(helper.SQL))
-	user := userService.GetByUserName(username)
-	if user != nil && user.Password == helper.SHA256(password) {
-		user.LogonCount += 1
-		user.LoginTime = time.Now()
-		err := userService.SaveOrUpdate(user)
-		if err == nil {
-			generateToken(context, user)
+	params := &helper.LoginParams{}
+	if err := context.Bind(params); err == nil{
+		userService := service.UserServiceInstance(repositories.UserRepositoryInstance(helper.SQL))
+		user := userService.GetByUserName(params.UserName)
+		if user != nil && user.Password == helper.SHA256(params.Password) {
+			user.LogonCount += 1
+			user.LoginTime = time.Now()
+			err := userService.SaveOrUpdate(user)
+			if err == nil {
+				generateToken(context, user)
+			} else {
+				context.JSON(http.StatusOK, helper.JsonObject{
+					Code:    "0",
+					Message: helper.StatusText(helper.LoginStatusSQLErr),
+					Content: err,
+				})
+			}
 		} else {
 			context.JSON(http.StatusOK, helper.JsonObject{
 				Code:    "0",
-				Message: helper.StatusText(helper.LoginStatusSQLErr),
-				Content: err,
+				Message: helper.StatusText(helper.LoginStatusErr),
 			})
 		}
-	} else {
-		context.JSON(http.StatusOK, helper.JsonObject{
+	}else {
+		context.JSON(http.StatusUnprocessableEntity, helper.JsonObject{
 			Code:    "0",
-			Message: helper.StatusText(helper.LoginStatusErr),
+			Message: helper.StatusText(helper.BindModelErr),
+			Content: err,
 		})
 	}
+
+
 }
 
 // 生成令牌
@@ -70,9 +79,9 @@ func generateToken(context *gin.Context, user *model.User) {
 		context.Abort()
 	}
 	context.JSON(http.StatusOK, helper.JsonObject{
-		Code:    "0",
+		Code:    "1",
 		Message: helper.StatusText(helper.LoginStatusOK),
-		Content: gin.H{"ACCESS_TOKEN": token},
+		Content: gin.H{"ACCESS_TOKEN": token,"User":user},
 	})
 }
 

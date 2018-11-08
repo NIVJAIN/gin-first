@@ -20,7 +20,6 @@ func RegisterApiRoutes(router *gin.Engine) {
 	api.POST("delete_user", control.DeleteUser)
 	api.GET("get_user", control.GetUser)
 	api.GET("get_all_users", control.GetAllUsers)
-
 	api.POST("save_role", control.SaveRole)
 
 }

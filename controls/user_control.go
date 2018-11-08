@@ -8,6 +8,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"strconv"
+	"strings"
 )
 
 // 添加、修改用户信息
@@ -134,17 +135,30 @@ func GetAllUsers(context *gin.Context) {
 }
 
 // 用户信息回显
-// @Summary 用户信息回显
+// @Summary 用户信息回显,传id按id查，传username按用户名查
 // @Tags UserController
 // @Accept json
 // @Produce json
-// @Param id query string true "用户记录id"
+// @Param id        query string false "用户记录id"
+// @Param username  query string false "用户名"
 // @Success 200 {object} model.User
 // @Router /api/get_user [get]
 func GetUser(context *gin.Context) {
 	id := context.Query("id")
+	username := context.Query("username")
+	if strings.TrimSpace(username+id) == "" {
+		context.JSON(http.StatusOK, helper.JsonObject{
+			Code:    "0",
+			Message: helper.StatusText(helper.NoneParamErr),
+		})
+	}
 	userService := service.UserServiceInstance(repositories.UserRepositoryInstance(helper.SQL))
-	user := userService.GetByID(id)
+	var user *model.User
+	if id != "" {
+		user = userService.GetByID(id)
+	}else {
+		user = userService.GetByUserName(username)
+	}
 	context.JSON(http.StatusOK, helper.JsonObject{
 		Code:    "1",
 		Content: user,

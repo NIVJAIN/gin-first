@@ -4,6 +4,7 @@ package helper
 
 const (
 	BindModelErr = 20200
+	NoneParamErr = 20201
 
 	LoginStatusSQLErr = 20319
 	LoginStatusErr    = 20300
@@ -35,6 +36,7 @@ const (
 var statusText = map[int]string{
 
 	BindModelErr: "模型封装异常！",
+	NoneParamErr: "无有效参数",
 
 	LoginStatusSQLErr: "用户登陆时更新登陆数据异常！",
 	LoginStatusErr:    "用户名或密码错误!",
