@@ -1,7 +1,7 @@
 package control
 
 import (
-	"gin-first/helper"
+	"gin-first/helpers"
 	"gin-first/models"
 	"gin-first/repositories"
 	"gin-first/services"
@@ -18,7 +18,7 @@ import (
 // @Param role_name      query string true  "角色名称"
 // @Param role_key       query string true  "角色类别标识"
 // @Param description    query string true  "角色描述信息"
-// @Success 200 {object} helper.JsonObject
+// @Success 200 {object} helpers.JsonObject
 // @Router /api/save_role [post]
 func SaveRole(context *gin.Context) {
 	var role model.Role

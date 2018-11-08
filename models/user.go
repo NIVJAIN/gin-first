@@ -1,7 +1,8 @@
 package model
 
 import (
-	"gin-first/helper"
+	"gin-first/helpers"
+	"gin-first/helpers/regex"
 	"github.com/jinzhu/gorm"
 	"github.com/satori/go.uuid"
 	"strings"
@@ -89,16 +90,16 @@ func (user *User) BeforeCreate(scope *gorm.Scope) error {
 // 校验表单中提交的参数是否合法
 func (user *User) Validator() error {
 
-	if ok, err := helper.MatchLetterNumMinAndMax(user.UserName, 4, 16, "用户名"); !ok {
+	if ok, err := regex.MatchLetterNumMinAndMax(user.UserName, 4, 16, "用户名"); !ok {
 		return err
 	}
-	if ok, err := helper.MatchStrongPassword(user.Password, 6, 13); !ok && strings.TrimSpace(user.ID) == "" {
+	if ok, err := regex.MatchStrongPassword(user.Password, 6, 13); !ok && strings.TrimSpace(user.ID) == "" {
 		return err
 	}
-	if ok, err := helper.IsPhone(user.Phone); !ok {
+	if ok, err := regex.IsPhone(user.Phone); !ok {
 		return err
 	}
-	if ok, err := helper.IsEmail(user.Email); !ok && strings.TrimSpace(user.Email) != "" {
+	if ok, err := regex.IsEmail(user.Email); !ok && strings.TrimSpace(user.Email) != "" {
 		return err
 	}
 	return nil

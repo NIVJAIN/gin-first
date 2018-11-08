@@ -2,7 +2,7 @@ package service
 
 import (
 	"errors"
-	"gin-first/helper"
+	"gin-first/helpers"
 	"gin-first/models"
 	"gin-first/repositories"
 	"strings"

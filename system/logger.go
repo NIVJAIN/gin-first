@@ -2,6 +2,7 @@ package system
 
 import (
 	"fmt"
+	"gin-first/helpers/datetime"
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
 	"math"
@@ -46,7 +47,7 @@ func Logger(log *logrus.Logger) gin.HandlerFunc {
 		if len(context.Errors) > 0 {
 			entry.Error(context.Errors.ByType(gin.ErrorTypePrivate).String())
 		} else {
-			msg := fmt.Sprintf("[%s] \"%s %s\" %d",  time.Now().Format("2006-01-02 15:04:05"), context.Request.Method, path, statusCode)
+			msg := fmt.Sprintf("[%s] \"%s %s\" %d",  time.Now().Format(datetime.DefalutFormat), context.Request.Method, path, statusCode)
 			if statusCode > 499 {
 				entry.Error(msg)
 			} else if statusCode > 399 {

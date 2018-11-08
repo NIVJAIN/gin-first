@@ -1,7 +1,7 @@
 package repositories
 
 import (
-	"gin-first/helper"
+	"gin-first/helpers"
 	"gin-first/models"
 	"github.com/jinzhu/gorm"
 )

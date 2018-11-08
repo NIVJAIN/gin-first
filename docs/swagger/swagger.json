@@ -40,7 +40,7 @@
                         "description": "OK",
                         "schema": {
                             "type": "object",
-                            "$ref": "#/definitions/helper.JsonObject"
+                            "$ref": "#/definitions/helpers.JsonObject"
                         }
                     }
                 }
@@ -63,7 +63,7 @@
                         "description": "OK",
                         "schema": {
                             "type": "object",
-                            "$ref": "#/definitions/helper.JsonObject"
+                            "$ref": "#/definitions/helpers.JsonObject"
                         }
                     }
                 }
@@ -80,14 +80,19 @@
                 "tags": [
                     "UserController"
                 ],
-                "summary": "用户信息回显",
+                "summary": "用户信息回显,传id按id查，传username按用户名查",
                 "parameters": [
                     {
                         "type": "string",
                         "description": "用户记录id",
                         "name": "id",
-                        "in": "query",
-                        "required": true
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "用户名",
+                        "name": "username",
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -146,7 +151,7 @@
                         "description": "OK",
                         "schema": {
                             "type": "object",
-                            "$ref": "#/definitions/helper.PageBean"
+                            "$ref": "#/definitions/helpers.PageBean"
                         }
                     }
                 }
@@ -198,7 +203,7 @@
                         "description": "OK",
                         "schema": {
                             "type": "object",
-                            "$ref": "#/definitions/helper.JsonObject"
+                            "$ref": "#/definitions/helpers.JsonObject"
                         }
                     }
                 }
@@ -271,7 +276,7 @@
                         "description": "OK",
                         "schema": {
                             "type": "object",
-                            "$ref": "#/definitions/helper.JsonObject"
+                            "$ref": "#/definitions/helpers.JsonObject"
                         }
                     }
                 }
@@ -310,7 +315,7 @@
                         "description": "OK",
                         "schema": {
                             "type": "object",
-                            "$ref": "#/definitions/helper.JsonObject"
+                            "$ref": "#/definitions/helpers.JsonObject"
                         }
                     }
                 }
@@ -318,40 +323,33 @@
         }
     },
     "definitions": {
-        "helper.JsonObject": {
+        "helpers.JsonObject": {
             "type": "object",
             "properties": {
                 "code": {
-                    "description": "* 状态码",
                     "type": "string"
                 },
                 "content": {
-                    "description": "* 内容体",
                     "type": "object"
                 },
                 "message": {
-                    "description": "* 消息",
                     "type": "string"
                 }
             }
         },
-        "helper.PageBean": {
+        "helpers.PageBean": {
             "type": "object",
             "properties": {
                 "page": {
-                    "description": "* 当前页",
                     "type": "integer"
                 },
                 "pageSize": {
-                    "description": "* 每页显示的最大行数",
                     "type": "integer"
                 },
                 "rows": {
-                    "description": "* 每行的数据",
                     "type": "object"
                 },
                 "total": {
-                    "description": "* 总记录数",
                     "type": "integer"
                 }
             }
@@ -359,8 +357,8 @@
         "model.Role": {
             "type": "object",
             "required": [
-                "roleName",
-                "roleKey"
+                "roleKey",
+                "roleName"
             ],
             "properties": {
                 "createdAt": {
@@ -396,8 +394,8 @@
         "model.User": {
             "type": "object",
             "required": [
-                "phone",
-                "userName"
+                "userName",
+                "phone"
             ],
             "properties": {
                 "createdAt": {

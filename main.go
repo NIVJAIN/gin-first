@@ -1,7 +1,7 @@
 package main
 
 import (
-	"gin-first/helper"
+	"gin-first/helpers"
 	"gin-first/routers"
 	"gin-first/system"
 	"github.com/gin-contrib/cors"

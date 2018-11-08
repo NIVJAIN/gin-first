@@ -1,7 +1,7 @@
 package model
 
 import (
-	"gin-first/helper"
+	"gin-first/helpers"
 	"github.com/jinzhu/gorm"
 	"github.com/satori/go.uuid"
 )

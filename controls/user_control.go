@@ -1,7 +1,7 @@
 package control
 
 import (
-	"gin-first/helper"
+	"gin-first/helpers"
 	"gin-first/models"
 	"gin-first/repositories"
 	"gin-first/services"
@@ -23,7 +23,7 @@ import (
 // @Param email          query string true  "邮件"
 // @Param merchant_no    query string true  "商户号"
 // @Param role_id        query string true  "角色id"
-// @Success 200 {object} helper.JsonObject
+// @Success 200 {object} helpers.JsonObject
 // @Router /api/save_user [post]
 func SaveUser(context *gin.Context) {
 	user := &model.User{}
@@ -75,7 +75,7 @@ func SaveUser(context *gin.Context) {
 // @Param page_size query string true "每页显示最大行"
 // @Param username query string false "用户名"
 // @Param phone query string false "电话"
-// @Success 200 {object} helper.PageBean
+// @Success 200 {object} helpers.PageBean
 // @Router /api/get_user_page [get]
 func GetUserPage(context *gin.Context) {
 	page, _ := strconv.Atoi(context.Query("page"))
@@ -96,7 +96,7 @@ func GetUserPage(context *gin.Context) {
 // @Accept json
 // @Produce json
 // @Param id query string true "用户记录id"
-// @Success 200 {object} helper.JsonObject
+// @Success 200 {object} helpers.JsonObject
 // @Router /api/delete_user [post]
 func DeleteUser(context *gin.Context) {
 	id := context.Query("id")
@@ -122,7 +122,7 @@ func DeleteUser(context *gin.Context) {
 // @Tags UserController
 // @Accept json
 // @Produce json
-// @Success 200 {object} helper.JsonObject
+// @Success 200 {object} helpers.JsonObject
 // @Router /api/get_all_users [get]
 func GetAllUsers(context *gin.Context) {
 	userService := service.UserServiceInstance(repositories.UserRepositoryInstance(helper.SQL))

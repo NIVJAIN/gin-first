@@ -1,7 +1,7 @@
 package control
 
 import (
-	"gin-first/helper"
+	"gin-first/helpers"
 	"gin-first/models"
 	"gin-first/repositories"
 	"gin-first/services"
@@ -20,7 +20,7 @@ import (
 // @Produce json
 // @Param username query string true "用户名"
 // @Param password query string true "密码"
-// @Success 200 {object} helper.JsonObject
+// @Success 200 {object} helpers.JsonObject
 // @Router /login [post]
 func Login(context *gin.Context) {
 	params := &helper.LoginParams{}

@@ -1,8 +1,9 @@
-package helper
+package regex
 
 import (
 	"errors"
 	"fmt"
+	"gin-first/helpers"
 	"regexp"
 )
 
@@ -145,7 +146,7 @@ func IsIDCard(text string) (ok bool, err error) {
 // 匹配带最大，最小长度限制的描述信息
 func DescMatchMinAndMax(text string, min int, max int) (ok bool, err error) {
 	if min > max {
-		return false, errors.New("备注或描述" + StatusText(MinThanMaxErr))
+		return false, errors.New("备注或描述" + helper.StatusText(helper.MinThanMaxErr))
 	}
 	if len(text) >= min && len(text) <= max {
 		if matched, _ := regexp.MatchString(DescRegex, text); matched {
@@ -159,7 +160,7 @@ func DescMatchMinAndMax(text string, min int, max int) (ok bool, err error) {
 // 匹配带最大长度的描述信息
 func DescMatchMax(text string, max int) (ok bool, err error) {
 	if max < 0 {
-		return false, errors.New("备注或描述" + StatusText(MaxLessZeroErr))
+		return false, errors.New("备注或描述" + helper.StatusText(helper.MaxLessZeroErr))
 	}
 	if len(text) <= max {
 		if matched, _ := regexp.MatchString(DescRegex, text); matched {
@@ -173,7 +174,7 @@ func DescMatchMax(text string, max int) (ok bool, err error) {
 // 匹配带最大，最小长度的数字字母
 func MatchLetterNumMinAndMax(text string, min int, max int, purpose string) (ok bool, err error) {
 	if min > max {
-		return false, errors.New(purpose + StatusText(MinThanMaxErr))
+		return false, errors.New(purpose + helper.StatusText(helper.MinThanMaxErr))
 	}
 	if len(text) >= min && len(text) <= max {
 		if matched, _ := regexp.MatchString(LetNumRegex, text); matched {
@@ -187,7 +188,7 @@ func MatchLetterNumMinAndMax(text string, min int, max int, purpose string) (ok 
 // 匹配带最大长度的数字字母
 func MatchLetterNumMax(text string, max int, purpose string) (ok bool, err error) {
 	if max < 0 {
-		return false, errors.New(purpose + StatusText(MaxLessZeroErr))
+		return false, errors.New(purpose + helper.StatusText(helper.MaxLessZeroErr))
 	}
 	if len(text) <= max {
 		if matched, _ := regexp.MatchString(LetNumRegex, text); matched {
@@ -201,7 +202,7 @@ func MatchLetterNumMax(text string, max int, purpose string) (ok bool, err error
 // 匹配带最大最小长度的中文
 func MatchChineseMinAndMax(text string, min int, max int, purpose string) (ok bool, err error) {
 	if min > max {
-		return false, errors.New(purpose + StatusText(MinThanMaxErr))
+		return false, errors.New(purpose + helper.StatusText(helper.MinThanMaxErr))
 	}
 	if len(text) >= min && len(text) <= max {
 		if matched, _ := regexp.MatchString(ChineseRegex, text); matched {
@@ -215,7 +216,7 @@ func MatchChineseMinAndMax(text string, min int, max int, purpose string) (ok bo
 // 匹配带最大长度的中文
 func MatchChineseMax(text string, max int, purpose string) (ok bool, err error) {
 	if max < 0 {
-		return false, errors.New(purpose + StatusText(MaxLessZeroErr))
+		return false, errors.New(purpose + helper.StatusText(helper.MaxLessZeroErr))
 	}
 	if len(text) <= max {
 		if matched, _ := regexp.MatchString(ChineseRegex, text); matched {
@@ -229,63 +230,63 @@ func MatchChineseMax(text string, max int, purpose string) (ok bool, err error) 
 // 匹配中文名字
 func MatchChineseName(text string, min int, max int) (ok bool, err error) {
 	if min > max {
-		return false, errors.New("中文名" + StatusText(MinThanMaxErr))
+		return false, errors.New("中文名" + helper.StatusText(helper.MinThanMaxErr))
 	}
 	if len(text) >= min && len(text) <= max {
 		if matched, _ := regexp.MatchString(ChineseNameRegex, text); matched {
 			return true, nil
 		}
-		return false, errors.New(fmt.Sprintf(StatusText(ChineseNameErr), min, max))
+		return false, errors.New(fmt.Sprintf(helper.StatusText(helper.ChineseNameErr), min, max))
 	}
-	return false, errors.New(fmt.Sprintf(StatusText(ChineseNameErr), min, max))
+	return false, errors.New(fmt.Sprintf(helper.StatusText(helper.ChineseNameErr), min, max))
 }
 
 // 匹配英文名
 func MatchEnglishName(text string, min int, max int) (ok bool, err error) {
 	if min > max {
-		return false, errors.New("英文名" + StatusText(MinThanMaxErr))
+		return false, errors.New("英文名" + helper.StatusText(helper.MinThanMaxErr))
 	}
 	if len(text) >= min && len(text) <= max {
 		if matched, _ := regexp.MatchString(EnglishNameRegex, text); matched {
 			return true, nil
 		}
-		return false, errors.New(fmt.Sprintf(StatusText(EnglishNameErr), min, max))
+		return false, errors.New(fmt.Sprintf(helper.StatusText(helper.EnglishNameErr), min, max))
 	}
-	return false, errors.New(fmt.Sprintf(StatusText(EnglishNameErr), min, max))
+	return false, errors.New(fmt.Sprintf(helper.StatusText(helper.EnglishNameErr), min, max))
 }
 
 // 强密码
 func MatchStrongPassword(text string, min int, max int) (ok bool, err error) {
 	if min > max {
-		return false, errors.New("密码" + StatusText(MinThanMaxErr))
+		return false, errors.New("密码" + helper.StatusText(helper.MinThanMaxErr))
 	}
 	if len(text) >= min && len(text) <= max {
 		if matched, _ := regexp.MatchString(StrongPassword, text); matched {
 			return true, nil
 		}
-		return false, errors.New(fmt.Sprintf(StatusText(StrongPasswordErr), min, max))
+		return false, errors.New(fmt.Sprintf(helper.StatusText(helper.StrongPasswordErr), min, max))
 	}
-	return false, errors.New(fmt.Sprintf(StatusText(StrongPasswordErr), min, max))
+	return false, errors.New(fmt.Sprintf(helper.StatusText(helper.StrongPasswordErr), min, max))
 }
 
 // 匹配中度密码
 func MatchMediumPassword(text string, min int, max int) (ok bool, err error) {
 	if min > max {
-		return false, errors.New("密码" + StatusText(MinThanMaxErr))
+		return false, errors.New("密码" + helper.StatusText(helper.MinThanMaxErr))
 	}
 	if len(text) >= min && len(text) <= max {
 		if matched, _ := regexp.MatchString(MediumPassword, text); matched {
 			return true, nil
 		}
-		return false, errors.New(fmt.Sprintf(StatusText(MediumPasswordErr), min, max))
+		return false, errors.New(fmt.Sprintf(helper.StatusText(helper.MediumPasswordErr), min, max))
 	}
-	return false, errors.New(fmt.Sprintf(StatusText(MediumPasswordErr), min, max))
+	return false, errors.New(fmt.Sprintf(helper.StatusText(helper.MediumPasswordErr), min, max))
 }
 
 // 匹配纯数字字符串
 func MatchNumStrMinAndMax(text string, min int, max int, purpose string) (ok bool, err error) {
 	if min > max {
-		return false, errors.New(purpose + StatusText(MinThanMaxErr))
+		return false, errors.New(purpose + helper.StatusText(helper.MinThanMaxErr))
 	}
 	if len(text) >= min && len(text) <= max {
 		if matched, _ := regexp.MatchString(NumStrRegex, text); matched {
@@ -299,7 +300,7 @@ func MatchNumStrMinAndMax(text string, min int, max int, purpose string) (ok boo
 // 匹配定长的纯数字
 func MatchNumStrFix(text string, fix int, purpose string) (ok bool, err error) {
 	if fix < 0 {
-		return false, errors.New(purpose + StatusText(FixLessZeroErr))
+		return false, errors.New(purpose + helper.StatusText(helper.FixLessZeroErr))
 	}
 	if len(text) == fix {
 		if matched, _ := regexp.MatchString(HexStrRegex, text); matched {

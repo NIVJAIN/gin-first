@@ -1,6 +1,6 @@
 package repositories
 
-import "gin-first/helper"
+import "gin-first/helpers"
 
 // 基础 repository 接口
 type Repository interface {
