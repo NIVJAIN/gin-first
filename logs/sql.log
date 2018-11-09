@@ -1,4 +1,5 @@
-time="2018-11-08T00:46:08+08:00" level=info msg="sql/Users/coseman/GoLand/src/gin-first/repositories/user_repository.go:60178.968988msSELECT * FROM `user`  WHERE `user`.`deleted_at` IS NULL AND ((user_name = ?)) ORDER BY `user`.`id` ASC LIMIT 1[admin] 1"
+time="2018-11-09T14:16:13+08:00" level=info msg="sql/Users/coseman/GoLand/src/gin-first/repositories/user_repository.go:7038.164418msSELECT * FROM `user`  WHERE `user`.`deleted_at` IS NULL AND ((1=1))[] 16"
+ ?)) ORDER BY `user`.`id` ASC LIMIT 1[admin] 1"
 time="2018-11-08T00:46:08+08:00" level=info msg="sql/Users/coseman/GoLand/src/gin-first/repositories/user_repository.go:60261.120576msSELECT * FROM `user`  WHERE `user`.`deleted_at` IS NULL AND ((user_name = ?)) ORDER BY `user`.`id` ASC LIMIT 1[admin] 1"
 time="2018-11-08T00:46:08+08:00" level=info msg="sql/Users/coseman/GoLand/src/gin-first/repositories/user_repository.go:6078.168327msSELECT * FROM `user`  WHERE `user`.`deleted_at` IS NULL AND ((phone = ?)) ORDER BY `user`.`id` ASC LIMIT 1[1315223067] 1"
 time="2018-11-08T00:46:08+08:00" level=info msg="sql/Users/coseman/GoLand/src/gin-first/repositories/user_repository.go:5079.782158msSELECT * FROM `user`  WHERE `user`.`deleted_at` IS NULL AND ((id = ?)) ORDER BY `user`.`id` ASC LIMIT 1[2066ed30-380b-4620-9cbe-3b5586ef67ce] 1"

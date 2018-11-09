@@ -1,10 +1,13 @@
 package control
 
 import (
+	"fmt"
 	"gin-first/helpers"
+	"gin-first/helpers/datetime"
 	"gin-first/models"
 	"gin-first/repositories"
 	"gin-first/services"
+	 excel "github.com/360EntSecGroup-Skylar/excelize"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"strconv"
@@ -163,5 +166,28 @@ func GetUser(context *gin.Context) {
 		Code:    "1",
 		Content: user,
 	})
+	return
+}
+
+// 导出用户信息
+// @Summary 用户信息回显,传id按id查，传username按用户名查
+// @Tags UserController
+// @Router /api/export_user_infos [get]
+func ExportUserInfos(context *gin.Context)  {
+	w := context.Writer
+	filename := "用户信息.xlsx"
+	w.Header().Set("Content-Type","multipart/form-data")
+	w.Header().Set("Content-disposition", "attachment; filename=" + filename)
+	userService := service.UserServiceInstance(repositories.UserRepositoryInstance(helper.SQL))
+	users := userService.GetAll()
+	// 设置 excel 头行
+	titles := []string{"用户名","手机号","登陆时间"}
+	xlsx := excel.NewFile()
+	xlsx.SetSheetRow("Sheet1","A1",&titles)
+	for k, user := range users {
+		axis := "A"+ fmt.Sprintf("%d",k+2)
+		xlsx.SetSheetRow("Sheet1",axis, &[]interface{}{user.UserName, user.Phone, user.LoginTime.Format(datetime.DefalutFormat)})
+	}
+	xlsx.Write(w)
 	return
 }

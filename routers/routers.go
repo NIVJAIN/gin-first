@@ -46,5 +46,8 @@ func RegisterOpenRoutes(router *gin.Engine) {
 	router.POST("login", control.Login)
 
 	// 使用gin-swagger 中间件
-	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+	router.GET("swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+
+	// 文件下载
+	router.GET("api/export_user_infos",control.ExportUserInfos)
 }

@@ -44,8 +44,8 @@ definitions:
         description: '* 更新时间'
         type: string
     required:
-    - roleKey
     - roleName
+    - roleKey
     type: object
   model.User:
     properties:
@@ -129,6 +129,11 @@ paths:
             $ref: '#/definitions/helpers.JsonObject'
             type: object
       summary: 删除用户信息
+      tags:
+      - UserController
+  /api/export_user_infos:
+    get:
+      summary: 用户信息回显,传id按id查，传username按用户名查
       tags:
       - UserController
   /api/get_all_users:

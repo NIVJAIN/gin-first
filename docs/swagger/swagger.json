@@ -46,6 +46,14 @@
                 }
             }
         },
+        "/api/export_user_infos": {
+            "get": {
+                "tags": [
+                    "UserController"
+                ],
+                "summary": "用户信息回显,传id按id查，传username按用户名查"
+            }
+        },
         "/api/get_all_users": {
             "get": {
                 "consumes": [
@@ -357,8 +365,8 @@
         "model.Role": {
             "type": "object",
             "required": [
-                "roleKey",
-                "roleName"
+                "roleName",
+                "roleKey"
             ],
             "properties": {
                 "createdAt": {
